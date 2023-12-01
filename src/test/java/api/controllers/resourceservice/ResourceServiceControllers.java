@@ -30,9 +30,10 @@ public class ResourceServiceControllers extends TestBase {
         // Преобразование JSON в объект User с помощью Jackson
         ListResourceResponse listResourceResponse = objectMapper.readValue(jsonResponse, ListResourceResponse.class);
 
-        System.out.println(listResourceResponse.getData().get(0).getName());
-
         assertThat(response.code()).isEqualTo(200);
+        assertThat(listResourceResponse.getData().get(5).getName()).isEqualTo("blue turquoise");
+
+
     }
     public static void getSingleResource(int resource_id) throws IOException {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -46,9 +47,9 @@ public class ResourceServiceControllers extends TestBase {
         String jsonResponse = response.body().string();
         SingleResourceResponse singleResourceResponse = objectMapper.readValue(jsonResponse, SingleResourceResponse.class);
 
-        System.out.println(singleResourceResponse.getData().getName());
-
         assertThat(response.code()).isEqualTo(200);
+        assertThat(singleResourceResponse.getData().getId()).isEqualTo(2);
+        assertThat(singleResourceResponse.getData().getName()).isEqualTo("fuchsia rose");
     }
 
     public static void getSingleResourceNotFound(int resource_id) throws IOException {
@@ -57,7 +58,9 @@ public class ResourceServiceControllers extends TestBase {
         urlBuilder.setPathSegment(2, String.valueOf(resource_id));
         String url = urlBuilder.build().toString();
         Response response = getRequest(url);
+
         assertThat(response.code()).isEqualTo(404);
+        assert response.body() != null;
         assertThat(response.body().string()).isEqualTo("{}");
     }
 }

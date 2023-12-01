@@ -30,9 +30,9 @@ public class AuthServiceController extends TestBase {
         String jsonResponse = response.body().string();
         RegisterSuccessfulResponse registerSuccessfulResponse = objectMapper.readValue(jsonResponse, RegisterSuccessfulResponse.class);
 
-        System.out.println(registerSuccessfulResponse.getToken());
-
         assertThat(response.code()).isEqualTo(200);
+        assertThat(registerSuccessfulResponse.getId()).isEqualTo(4);
+        assertThat(registerSuccessfulResponse.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
     }
     public static void postRegisterUnsuccessful() throws IOException {
         String url = Routes.BASE_URL + REGISTER_UNSUCCESSFUL;
@@ -43,9 +43,8 @@ public class AuthServiceController extends TestBase {
         String jsonResponse = response.body().string();
         RegisterUnsuccessfulResponse registerUnsuccessfulResponse = objectMapper.readValue(jsonResponse, RegisterUnsuccessfulResponse.class);
 
-        //System.out.println(registerUnsuccessfulResponse.);
-
         assertThat(response.code()).isEqualTo(400);
+        assertThat(registerUnsuccessfulResponse.getError()).isEqualTo("Missing password");
     }
     public static void postLoginSuccessful() throws IOException {
         String url = Routes.BASE_URL + LOGIN_SUCCESSFUL;
@@ -60,8 +59,8 @@ public class AuthServiceController extends TestBase {
         String jsonResponse = response.body().string();
         LoginSuccessfulResponse loginSuccessfulResponse = objectMapper.readValue(jsonResponse, LoginSuccessfulResponse.class);
 
-        System.out.println(loginSuccessfulResponse.getToken());
         assertThat(response.code()).isEqualTo(200);
+        assertThat(loginSuccessfulResponse.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
     }
 
     public static void postLoginUnsuccessful() throws IOException {
@@ -74,7 +73,8 @@ public class AuthServiceController extends TestBase {
         assert response.body() != null;
         String jsonResponse = response.body().string();
         LoginUnsuccessfulResponse loginUnsuccessfulResponse = objectMapper.readValue(jsonResponse, LoginUnsuccessfulResponse.class);
-        System.out.println(loginUnsuccessfulResponse.getError());
+
         assertThat(response.code()).isEqualTo(400);
+        assertThat(loginUnsuccessfulResponse.getError()).isEqualTo("Missing password");
     }
 }

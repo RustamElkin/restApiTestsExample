@@ -33,8 +33,11 @@ public class UserServiceControllers extends TestBase {
             // Преобразование JSON в объект User с помощью Jackson
             ListUsersResponse listUsersResponse = objectMapper.readValue(jsonResponse, ListUsersResponse.class);
 
-        //System.out.println(listUsersResponse.getData().get(0).getEmail());
         assertThat(response.code()).isEqualTo(200);
+        assertThat(listUsersResponse.getPerPage()).isEqualTo(6);
+        assertThat(listUsersResponse.getTotal()).isEqualTo(12);
+        assertThat(listUsersResponse.getData().get(0).getEmail()).isEqualTo("michael.lawson@reqres.in");
+
     }
     public static void getSingleUser(int userId) throws IOException {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -49,9 +52,8 @@ public class UserServiceControllers extends TestBase {
         // Преобразование JSON в объект User с помощью Jackson
         SingleUserResponse singleUserResponse = objectMapper.readValue(jsonResponse, SingleUserResponse.class);
 
-//        System.out.println(singleUserResponse.getData().getEmail());
-
         assertThat(response.code()).isEqualTo(200);
+        assertThat(singleUserResponse.getData().getEmail()).isEqualTo("janet.weaver@reqres.in");
     }
     public static void getSingleUserNotFound(int userId) throws IOException {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -76,9 +78,9 @@ public class UserServiceControllers extends TestBase {
         String jsonResponse = response.body().string();
         UsersResponse usersResponse = objectMapper.readValue(jsonResponse, UsersResponse.class);
 
-        System.out.println(usersResponse.getName());
-
         assertThat(response.code()).isEqualTo(201);
+        assertThat(usersResponse.getName()).isEqualTo("morpheus");
+        assertThat(usersResponse.getJob()).isEqualTo("leader");
     }
     public static void putChangeUser(int userId) throws IOException {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -96,9 +98,9 @@ public class UserServiceControllers extends TestBase {
         String jsonResponse = response.body().string();
         UsersResponse usersResponse = objectMapper.readValue(jsonResponse, UsersResponse.class);
 
-        System.out.println(usersResponse.getName());
-
         assertThat(response.code()).isEqualTo(200);
+        assertThat(usersResponse.getName()).isEqualTo("morpheus");
+        assertThat(usersResponse.getJob()).isEqualTo("zion resident");
     }
     public static void patchChangeUser(int userId) throws IOException {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
@@ -116,8 +118,9 @@ public class UserServiceControllers extends TestBase {
         String jsonResponse = response.body().string();
         UsersResponse usersResponse = objectMapper.readValue(jsonResponse, UsersResponse.class);
 
-        System.out.println(usersResponse.getName());
         assertThat(response.code()).isEqualTo(200);
+        assertThat(usersResponse.getName()).isEqualTo("morpheus");
+        assertThat(usersResponse.getJob()).isEqualTo("zion resident");
     }
     public static void deleteUser(int userId) throws IOException {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(
